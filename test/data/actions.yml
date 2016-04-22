@@ -1,0 +1,93 @@
+---
+trailblazer-rails:
+  version: ~> 0.2.4
+cells:
+  version: ~> 4.0.4
+es6:
+  gsub:
+    Gemfile:
+    - from: gem 'coffee-rails'
+      to: "# gem 'coffee-rails'"
+  rm: [app/assets/javascripts/cable.coffee]
+  create:
+    app/assets/javascripts/cable.js: |
+      // Action Cable provides the framework to deal with WebSockets in Rails.
+      // You can generate new channels where WebSocket features live using the rails
+      // generate channel command.
+      //
+      // Turn on the cable connection by removing the comments after the require
+      // statements (and ensure it's also on in config/routes.rb).
+      //
+      //= require action_cable
+      //= require_self
+      //= require_tree ./channels
+      //
+      // this.App || (this.App = {});
+      // App.cable = ActionCable.createConsumer();
+foundation-rails:
+  version: ~> 6.2
+  after_bundle:
+    generate: 'foundation:install'
+    gsub:
+      app/assets/stylesheets/foundation_and_overrides.scss:
+      - from: "// @import 'motion-ui/motion-ui';"
+        to: "@import 'motion-ui/motion-ui';"
+      - from: '// @include motion-ui-transitions;'
+        to: '@include motion-ui-transitions;'
+      - from: '// @include motion-ui-animations;'
+        to: '@include motion-ui-animations;'
+foundation+slim:
+  after_bundle:
+    generate: 'foundation:install --slim'
+    rm:
+    - app/views/layouts/application.html.erb
+slim-rails:
+  version:
+    github: 'semenovdl/slim-rails'
+  rm:
+  - app/views/layouts/application.html.erb
+  - app/views/layouts/mailer.html.erb
+  - app/views/layouts/mailer.text.erb
+  create:
+    app/views/layouts/mailer.html.slim: |
+      doctype html
+      html
+        head
+          meta content=("text/html; charset=utf-8") http-equiv="Content-Type" /
+          css:
+            /!* Email styles need to be inline */
+        body
+          = yield
+    app/views/layouts/mailer.text.slim: |
+      = yield
+autoprefixer-rails:
+  version: ~> 6.3
+simple_form:
+  version: ~> 3.2
+  after_bundle:
+    generate: simple_form:install
+foundation+simple_form:
+  after_bundle:
+    generate: simple_form:install --foundation
+sidekiq:
+  version: ~> 4.1
+dotenv-rails:
+  version: ~> 2.1
+  create:
+    .env: ''
+  append:
+    .gitignore: |
+      .env.production
+      .env.local
+devise:
+  disable: true
+  version: ~> 3.5
+  after_bundle:
+    generate:
+    - devise:install
+    - ['devise', 'User']
+  insert:
+    config/environments/development.rb:
+      data: |2
+          config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+      before: !ruby/regexp "/^end/"

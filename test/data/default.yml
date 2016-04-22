@@ -1,0 +1,11 @@
+---
+db: postgresql
+rails: 5
+architecture: trailblazer+cells
+environments: dotenv
+background_jobs: sidekiq
+authentification: devise
+frontend:
+- es6
+- foundation+slim+simple_form
+- autoprefixer-rails

@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+require 'yaml'
+
+$LOAD_PATH << File.dirname(__FILE__) + '/lib'
+require 'settings'
+require 'command'
+require 'template_engine'

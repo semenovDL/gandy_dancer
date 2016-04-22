@@ -1,0 +1,15 @@
+---
+trailblazer: trailblazer-rails
+dotenv: dotenv-rails
+foundation: foundation-rails
+slim: slim-rails
+[foundation, simple_form]: foundation+simple_form
+[foundation, slim]: foundation+slim
+minitest:
+- minitest
+- minitest-reporters
+- minitest-rails
+[minitest, capybara]:
+- minitest-capybara
+- minitest-rails-capybara
+factory-girl: factory_girl_rails

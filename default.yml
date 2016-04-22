@@ -1,0 +1,255 @@
+---
+core:
+  rails:
+    version: 5.0.0.beta3
+framework:
+  # Setup awesome trailblazer framework
+  trailblazer-rails:
+    version: ~> 0.2.4
+  cells:
+    version: ~> 4.0.4
+frontend:
+  # Change coffee to vanilla javascript
+  coffee-rails:
+    gsub:
+      Gemfile:
+      - from: gem 'coffee-rails'
+        to: "# gem 'coffee-rails'"
+    rm: [app/assets/javascripts/cable.coffee]
+    create:
+      app/assets/javascripts/cable.js: |
+        // Action Cable provides the framework to deal with WebSockets in Rails.
+        // You can generate new channels where WebSocket features live using the rails
+        // generate channel command.
+        //
+        // Turn on the cable connection by removing the comments after the require
+        // statements (and ensure it's also on in config/routes.rb).
+        //
+        //= require action_cable
+        //= require_self
+        //= require_tree ./channels
+        //
+        // this.App || (this.App = {});
+        // App.cable = ActionCable.createConsumer();
+  foundation-rails:
+    version: ~> 6.2
+    after_bundle:
+      generate: 'foundation:install --slim'
+      gsub:
+        app/assets/stylesheets/foundation_and_overrides.scss:
+        - from: "// @import 'motion-ui/motion-ui';"
+          to: "@import 'motion-ui/motion-ui';"
+        - from: '// @include motion-ui-transitions;'
+          to: '@include motion-ui-transitions;'
+        - from: '// @include motion-ui-animations;'
+          to: '@include motion-ui-animations;'
+  slim-rails:
+    version:
+      github: 'semenovdl/slim-rails'
+    rm:
+    - app/views/layouts/application.html.erb
+    - app/views/layouts/mailer.html.erb
+    - app/views/layouts/mailer.text.erb
+    create:
+      app/views/layouts/mailer.html.slim: |
+        doctype html
+        html
+          head
+            meta content=("text/html; charset=utf-8") http-equiv="Content-Type" /
+            css:
+              /!* Email styles need to be inline */
+          body
+            = yield
+      app/views/layouts/mailer.text.slim: |
+        = yield
+  autoprefixer-rails:
+    version: ~> 6.3
+  font-awesome-rails:
+    version: ~> 4.5
+    insert:
+      app/assets/stylesheets/application.css:
+        data: " *= require font-awesome\n"
+        after: " *= require_self\n"
+  evil_icons:
+    version: ~> 1.8
+    insert:
+      app/assets/stylesheets/application.css:
+        data: " *= require evil-icons\n"
+        after: " *= require_self\n"
+  simple_form:
+    version: ~> 3.2
+    after_bundle:
+      generate: simple_form:install --foundation
+test:
+  minitest:
+    version: ~> 5.8.4
+  minitest-reporters:
+    version: ~> 1.1
+  capybara:
+    version: ~> 2.6.2
+  minitest-capybara:
+    version: ~> 0.7.2
+  minitest-rails:
+    version:
+      github: 'blowmage/minitest-rails'
+      branch: 'rails5'
+  minitest-rails-capybara:
+    version:
+      github: 'blowmage/minitest-rails-capybara'
+      branch: 'rails5'
+  factory_girl_rails:
+    version:
+      github: 'thoughtbot/factory_girl_rails'
+      branch: 'jc-rails-5'
+    rm: [test/test_helper.rb]
+    create:
+      test/test_helper.rb: |
+        ENV['RAILS_ENV'] ||= 'test'
+        require File.expand_path('../../config/environment', __FILE__)
+        require 'rails/test_help'
+        require 'minitest/rails'
+        require 'minitest/rails/capybara'
+        # https://github.com/kern/minitest-reporters
+        require 'minitest/reporters'
+        Minitest::Reporters.use!
+
+        class ActiveSupport::TestCase
+          include FactoryGirl::Syntax::Methods
+        end
+    rm_rf: [test/fixtures]
+    insert:
+      config/application.rb:
+        data: |2
+              config.generators do |g|
+                g.test_framework :minitest, spec: true, fixture: false
+                g.fixture_replacement :factory_girl
+              end
+        after: "class Application < Rails::Application\n"
+  faker:
+    version: ~> 1.6
+  database_cleaner:
+    version: ~> 1.5
+  timecop:
+    version: ~> 0.8.1
+  simplecov:
+    version: ~> 0.11.2
+    require: false
+    insert:
+      test/test_helper.rb:
+        data: |
+          require 'simplecov'
+          SimpleCov.start
+        after: "ENV['RAILS_ENV'] ||= 'test'\n"
+    append:
+      .gitignore: "coverage\n"
+tools:
+  yard:
+    version: ~> 0.8.7.6
+  annotate:
+    version: ~> 2.7
+    create:
+      lib/tasks/auto_annotate_models.rake: |
+        # NOTE: only doing this in development as some production environments (Heroku)
+        # NOTE: are sensitive to local FS writes, and besides -- it's just not proper
+        # NOTE: to have a dev-mode tool do its thing in production.
+        if Rails.env.development?
+          task :set_annotation_options do
+            # You can override any of these by setting an environment variable of the
+            # same name.
+            Annotate.set_defaults(
+              'routes'                  => 'true',
+              'position_in_routes'      => 'before',
+              'position_in_class'       => 'before',
+              'position_in_test'        => 'before',
+              'position_in_fixture'     => 'before',
+              'position_in_factory'     => 'before',
+              'position_in_serializer'  => 'before',
+              'show_foreign_keys'       => 'true',
+              'show_indexes'            => 'true',
+              'simple_indexes'          => 'false',
+              'model_dir'               => 'app/models',
+              'root_dir'                => '',
+              'include_version'         => 'false',
+              'require'                 => '',
+              'exclude_tests'           => 'false',
+              'exclude_fixtures'        => 'false',
+              'exclude_factories'       => 'false',
+              'exclude_serializers'     => 'false',
+              'exclude_scaffolds'       => 'false',
+              'exclude_controllers'     => 'false',
+              'exclude_helpers'         => 'false',
+              'ignore_model_sub_dir'    => 'false',
+              'ignore_columns'          => nil,
+              'ignore_unknown_models'   => 'false',
+              'hide_limit_column_types' => 'integer,boolean',
+              'skip_on_db_migrate'      => 'false',
+              'format_bare'             => 'true',
+              'format_rdoc'             => 'false',
+              'format_markdown'         => 'false',
+              'sort'                    => 'false',
+              'force'                   => 'false',
+              'trace'                   => 'false',
+              'wrapper_open'            => nil,
+              'wrapper_close'           => nil,
+            )
+          end
+
+          Annotate.load_tasks
+        end
+  bundler-audit:
+    version: ~> 0.5.0
+  rubocop:
+    version: ~> 0.39.0
+    require: false
+  pry-rails:
+    version: ~> 0.3.4
+  pry-byebug:
+    version: ~> 3.3
+  awesome_print:
+    version: ~> 1.6
+  bullet:
+    # Currently bullet don't work with 5.0.0.beta3
+    disable: true
+    version: ~> 5.0
+    insert:
+      config/environments/development.rb:
+        data: |2
+            config.after_initialize do
+              Bullet.enable = true
+              Bullet.alert = true
+              Bullet.bullet_logger = true
+              Bullet.console = true
+              # Bullet.growl = true
+              Bullet.rails_logger = true
+              Bullet.add_footer = true
+            end
+        before: !ruby/regexp "/^end/"
+  better_errors:
+    version: ~> 2.1
+  binding_of_caller:
+    version: ~> 0.7.2
+background_jobs:
+  sidekiq:
+    version: ~> 4.1
+environments:
+  dotenv-rails:
+    version: ~> 2.1
+    create:
+      .env: ''
+    append:
+      .gitignore: |
+        .env.production
+        .env.local
+authentification:
+  devise:
+    disable: true
+    version: ~> 3.5
+    after_bundle:
+      generate:
+      - devise:install
+      - ['devise', 'User']
+    insert:
+      config/environments/development.rb:
+        data: |2
+            config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+        before: !ruby/regexp "/^end/"

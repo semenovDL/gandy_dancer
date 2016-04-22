@@ -1,0 +1,34 @@
+---
+db: postgresql
+rails: 5
+architecture: trailblazer+cells
+environments: dotenv
+background_jobs: sidekiq
+authentification: devise
+frontend:
+- es6
+- foundation+slim+simple_form
+- autoprefixer-rails
+- font-awesome-rails
+- evil_icons
+tests:
+- minitest+capybara # test framework
+- factory-girl # fixtures
+- faker # fake data
+- database_cleaner
+- timecop # time freeze
+documentation:
+- yard # format
+- simplecov # code_coverage
+- rubocop # code_style
+- annotate # models annotation
+performance:
+- bullet # N+1 problem
+security:
+- bundler-audit
+debug:
+- pry-rails
+- pry-byebug
+- awesome_print
+- better_errors
+- binding_of_caller

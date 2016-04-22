@@ -1,0 +1,8 @@
+test_helper:
+  repo: github.com/blowmage/minitest-rails
+  path: lib/generators/minitest/install/templates/test_helper.rb
+  commit: df40b9904d48722b22296cd45d84fa1315e8b0ef
+cable:
+  repo: github.com/rails/rails
+  path: actioncable/app/assets/javascripts/action_cable.coffee.erb
+  commit: dde833816a46c2738fa40af179751e9162a468eb

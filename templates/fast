@@ -1,0 +1,6 @@
+bin/spring stop
+rails g scaffold students name:string age:integer
+bundle exec rake db:drop
+bundle exec rake db:create
+bundle exec rake db:migrate
+rails s

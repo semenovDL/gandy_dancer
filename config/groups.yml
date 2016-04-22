@@ -1,0 +1,25 @@
+development:
+- yard
+- annotate
+- bundler-audit
+- rubocop
+- pry-rails
+- pry-byebug
+- awesome_print
+- bullet
+- better_errors
+- binding_of_caller
+- dotenv-rails
+test:
+- minitest
+- minitest-reporters
+- capybara
+- minitest-capybara
+- minitest-rails
+- minitest-rails-capybara
+- factory_girl_rails
+- faker
+- database_cleaner
+- timecop
+- simplecov
+- dotenv-rails
