@@ -1,7 +1,9 @@
 require 'singleton'
 
 module GandyDancer
-  class Build
+  # Store options, passed through command line and allow access to them as
+  # class methods
+  class BuildTarget
     include Singleton
     attr_accessor :params
     def method_missing(name, *args, &block)
@@ -15,6 +17,7 @@ module GandyDancer
     class << self
       def setup(params)
         instance.params = params.to_hash.symbolize_keys.freeze
+        instance.freeze
       end
 
       def method_missing(name, *args, &block)

@@ -1,10 +1,11 @@
 require 'forwardable'
 
 module GandyDancer
-  class BuildCommand
-    attr_reader :context
+  # wrap rails template logic and increase its functionality
+  class TemplateWrapper
     extend Forwardable
-    def_delegators :@context, :gsub_file, :run, :create_file, :insert_into_file, :append_to_file
+    def_delegators :@context, :gsub_file, :run,
+                   :create_file, :insert_into_file, :append_to_file
 
     def initialize(context)
       unless context.is_a?(Rails::Generators::AppGenerator)
@@ -48,9 +49,8 @@ module GandyDancer
       end
     end
 
-    def generate(data)
-      data = [*data]
-      data.each { |c| context.generate(*c) }
-    end
+    # def generate(data)
+    #   [*data].each { |c| @context.generate(*c) }
+    # end
   end
 end

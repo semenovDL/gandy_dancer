@@ -4,7 +4,7 @@ end
 
 git :init
 
-command_wrapper = GandyDancer::BuildCommand.new(self)
+command_wrapper = GandyDancer::TemplateWrapper.new(self)
 
 config_file = File.expand_path('../default.yml', __FILE__)
 config = YAML.load(File.read(config_file))

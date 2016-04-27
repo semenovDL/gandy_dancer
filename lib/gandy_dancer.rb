@@ -18,6 +18,10 @@ module GandyDancer
       "#{root}/config"
     end
 
+    def load_yml(file_name)
+      YAML.load(File.read("#{config_path}/#{file_name}.yml"))
+    end
+
     def ruby_version
       File.read("#{root}/.ruby-version").strip
     end
@@ -27,13 +31,15 @@ module GandyDancer
     end
 
     def rails_version
-      Build.rails
+      @rails_version ||= BuildTarget.rails
     end
 
     def build_app
-      project_path = Build.project.path
-      puts configuration = Configuration.load("#{config_path}/default.yml")
-      puts targets = configuration.targets.map { |t| Target.new(t) }.map(&:data)
+      # project_path = BuildTarget.project.path
+      configuration_file = load_yml('default')
+      puts configuration = Configuration.new(configuration_file)
+      puts configuration.to_h
+      # puts components = configuration.components
       # TemplateEngine.start(project_path)
     end
   end

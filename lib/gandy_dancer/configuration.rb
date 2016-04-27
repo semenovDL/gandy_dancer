@@ -2,13 +2,14 @@ module GandyDancer
   class Configuration
     attr_reader :db, :rails, :dependencies
     def initialize(configuration)
+      configuration.symbolize_keys!
       @db = configuration.delete(:db)
       @rails = configuration.delete(:rails)
       @dependencies = configuration.values.flatten
     end
 
-    def targets
-      @targets ||= DependencySolver.solve(dependencies)
+    def components
+      @components ||= DependencySolver.solve(dependencies)
     end
 
     def to_h
@@ -16,12 +17,8 @@ module GandyDancer
         db: db,
         rails: rails,
         dependencies: dependencies,
-        targets: targets
+        components: components
       }
-    end
-
-    def self.load(configuration_file)
-      new(YAML.load(File.read(configuration_file)).symbolize_keys)
     end
   end
 end

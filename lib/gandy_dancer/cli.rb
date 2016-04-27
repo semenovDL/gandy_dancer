@@ -35,7 +35,7 @@ module GandyDancer
       }
     }
 
-    desc 'build APP_NAME', 'build rails application'
+    desc 'build APP_NAME', 'build application'
     shared_options.each_pair { |meth, params| method_option(meth, params) }
     method_option :force, aliases: '-f', type: :boolean, default: false,
                           desc: 'Remove target folder with project before build'
@@ -43,11 +43,11 @@ module GandyDancer
       GandyDancer.check_ruby_version
       project = Project.register(project_path)
       project.prepare(options[:force])
-      Build.setup(options.symbolize_keys.merge(project: project))
+      BuildTarget.setup(options.symbolize_keys.merge(project: project))
       GandyDancer.build_app
     end
 
-    desc 'rebuild APP_NAME', 'force rebuild rails application'
+    desc 'rebuild APP_NAME', 'force rebuild application'
     shared_options.each_pair { |meth, params| method_option(meth, params) }
     def rebuild(project_path)
       options[:force] = true
@@ -56,6 +56,7 @@ module GandyDancer
 
     no_commands do
       # TODO: Implement project update
+      desc 'update APP_NAME', 'update existing application'
       def update(project_path)
       end
     end

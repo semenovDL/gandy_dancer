@@ -1,28 +1,25 @@
+require 'singleton'
+require 'forwardable'
+
 module GandyDancer
   class DependencySolver
-    def self.solve(dependencies)
-      new(mapper_file_path).solve(dependencies)
-    end
-
-    def self.mapper_file_path
-      "#{GandyDancer.root}/dependency_mapper.yml"
-    end
-
-    def initialize(mapper_file_path)
-      @mapper_file_path = mapper_file_path
-    end
+    include Singleton
+    extend SingleForwardable
+    def_delegator :instance, :solve
 
     def solve(dependencies)
-      remapping(split_config_values(dependencies))
+      remapping(split_config_values(dependencies)).map do |component|
+        Components.get(component)
+      end
     end
 
     private
 
     def dependency_mapper
       @dependency_mapper ||= begin
-        YAML.load(File.read(@mapper_file_path))
-            .transform_keys { |k| k.is_a?(Array) ? k.sort : k }
-            .transform_values { |v| [*v] }
+        GandyDancer.load_yml('dependency_mapper')
+                   .transform_keys { |k| k.is_a?(Array) ? k.sort : k }
+                   .transform_values { |v| [*v] }
       end
     end
 
@@ -46,7 +43,7 @@ module GandyDancer
         else
           dependency_mapper.key?(g) ? dependency_mapper[g] : g
         end
-      end.compact
+      end.compact.map(&:to_sym)
     end
   end
 end

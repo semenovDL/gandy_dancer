@@ -1,4 +1,5 @@
 module GandyDancer
+  # Project describes rails application, choosen as target
   class Project
     attr_reader :path
     def initialize(path)
@@ -12,9 +13,11 @@ module GandyDancer
       delete if delete_flag
     end
 
+    private
+
     def stop
       Dir.chdir(path) do
-        `bin/spring stop` if File.file?('bin/spring')
+        exec('bin/spring stop') if File.file?('bin/spring')
       end
     end
 
@@ -25,12 +28,14 @@ module GandyDancer
       end
     end
 
-    def self.projects
-      @projects ||= []
-    end
+    class << self
+      def projects
+        @projects ||= []
+      end
 
-    def self.register(path)
-      new(path).tap { |project| projects << project }
+      def register(path)
+        new(path).tap { |project| projects << project }
+      end
     end
   end
 end
