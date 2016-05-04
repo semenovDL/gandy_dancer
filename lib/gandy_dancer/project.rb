@@ -1,16 +1,22 @@
 module GandyDancer
   # Project describes rails application, choosen as target
   class Project
+    include Contracts::Core
+    extend Contracts::Core
+
     attr_reader :path
+
+    Contract String => C::Any
     def initialize(path)
-      raise 'Project path not provided' unless path
       @path = path
     end
 
+    Contract C::Bool => Project
     def prepare(delete_flag = false)
       return unless File.directory?(path)
       stop
       delete if delete_flag
+      self
     end
 
     private
@@ -29,10 +35,12 @@ module GandyDancer
     end
 
     class << self
+      Contract nil => C::Maybe[C::ArrayOf[Project], Array]
       def projects
         @projects ||= []
       end
 
+      Contract String => Project
       def register(path)
         new(path).tap { |project| projects << project }
       end

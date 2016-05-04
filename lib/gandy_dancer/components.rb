@@ -8,6 +8,9 @@ module GandyDancer
     extend SingleForwardable
     def_delegator :instance, :get
 
+    include Contracts::Core
+
+    Contract String => Component
     def get(name)
       components[name] || raise("No component for name #{name}")
     end

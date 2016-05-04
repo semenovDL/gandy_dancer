@@ -27,8 +27,10 @@ describe GandyDancer::Configuration do
 
   describe '.components' do
     it 'try to solve dependencies using DependencySolver' do
+      components = [GandyDancer::Component.new('', '')]
       GandyDancer::DependencySolver.expects(:solve).with(subject.dependencies)
-      subject.components
+                                   .returns(components)
+      assert_instance_of(GandyDancer::Component, subject.components.first)
     end
   end
 end

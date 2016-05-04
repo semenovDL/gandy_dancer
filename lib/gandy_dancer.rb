@@ -4,6 +4,8 @@ require 'yaml'
 require 'commons/hash/deep_merge'
 require 'commons/hash/keys'
 require 'commons/hash/transform_values'
+require 'contracts'
+C = Contracts
 
 Dir.glob("#{File.dirname(__FILE__)}/gandy_dancer/*").each { |f| require f }
 

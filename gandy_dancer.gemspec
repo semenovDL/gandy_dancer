@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('rake', '~> 11.1', '>= 11.1.2')
   s.add_dependency('thor', '~> 0.19.1')
+  s.add_dependency('contracts', '~> 0.14.0')
 
   s.files         = `git ls-files -- lib/*`.split("\n") + %w(History.txt License.txt README.md)
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

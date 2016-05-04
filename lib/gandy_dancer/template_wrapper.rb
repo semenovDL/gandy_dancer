@@ -4,6 +4,7 @@ module GandyDancer
   # wrap rails template logic and increase its functionality
   class TemplateWrapper
     extend Forwardable
+    include Contracts::Core
     def_delegators :@context, :gsub_file, :run,
                    :create_file, :insert_into_file, :append_to_file
 
@@ -14,6 +15,7 @@ module GandyDancer
       @context = context
     end
 
+    Contract C::HashOf[String => C::ArrayOf[C::HashOf[String => String]]] => C::Any
     def gsub(data)
       data.each_pair do |file, file_data|
         file_data.each do |line|
@@ -22,18 +24,22 @@ module GandyDancer
       end
     end
 
+    Contract C::ArrayOf[String] => C::Any
     def rm(data)
       data.each { |file| run "rm #{file}" }
     end
 
+    Contract C::ArrayOf[String] => C::Any
     def rm_rf(data)
       data.each { |file| run "rm -rf #{file}" }
     end
 
+    Contract C::HashOf[String => String] => C::Any
     def create(data)
       data.each_pair { |file, file_data| create_file(file, file_data) }
     end
 
+    Contract C::HashOf[String => C::HashOf[String => String]] => C::Any
     def insert(data)
       data.each_pair do |file, file_data|
         params = {}
@@ -43,6 +49,7 @@ module GandyDancer
       end
     end
 
+    Contract C::HashOf[String => String] => C::Any
     def append(data)
       data.each_pair do |file, file_data|
         append_to_file(file, file_data)

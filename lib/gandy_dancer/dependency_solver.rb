@@ -7,6 +7,9 @@ module GandyDancer
     extend SingleForwardable
     def_delegator :instance, :solve
 
+    include Contracts::Core
+
+    Contract C::ArrayOf[String] => C::ArrayOf[Component]
     def solve(dependencies)
       remapping(split_config_values(dependencies)).map do |component|
         Components.get(component)
