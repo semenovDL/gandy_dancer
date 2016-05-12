@@ -8,7 +8,7 @@ module GandyDancer
       configuration.symbolize_keys!
       @db = configuration.delete(:db)
       @rails = configuration.delete(:rails)
-      @dependencies = configuration.values.flatten
+      @dependencies = (configuration.values.flatten << 'rails')
     end
 
     Contract nil => C::ArrayOf[Component]

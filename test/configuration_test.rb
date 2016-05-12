@@ -20,7 +20,7 @@ describe GandyDancer::Configuration do
 
   describe '.dependencies' do
     it 'return flatten list of all dependencies' do
-      dependencies = %w(devise es6 foundation+slim+simple_form)
+      dependencies = %w(devise es6 foundation+slim+simple_form rails)
       assert_equal(dependencies, subject.dependencies)
     end
   end

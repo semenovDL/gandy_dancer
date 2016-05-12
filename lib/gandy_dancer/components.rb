@@ -10,7 +10,7 @@ module GandyDancer
 
     include Contracts::Core
 
-    Contract String => Component
+    Contract Symbol => Component
     def get(name)
       components[name] || raise("No component for name #{name}")
     end

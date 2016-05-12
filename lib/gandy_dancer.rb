@@ -37,12 +37,9 @@ module GandyDancer
     end
 
     def build_app
-      # project_path = BuildTarget.project.path
       configuration_file = load_yml('default')
-      puts configuration = Configuration.new(configuration_file)
-      puts configuration.to_h
-      # puts components = configuration.components
-      # TemplateEngine.start(project_path)
+      Configuration.new(configuration_file)
+      TemplateEngine.start
     end
   end
 end

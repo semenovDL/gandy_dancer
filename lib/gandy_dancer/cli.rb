@@ -49,8 +49,9 @@ module GandyDancer
 
     desc 'rebuild APP_NAME', 'force rebuild application'
     shared_options.each_pair { |meth, params| method_option(meth, params) }
+    method_option :force, aliases: '-f', type: :boolean, default: true,
+                          desc: 'Remove target folder with project before build'
     def rebuild(project_path)
-      options[:force] = true
       build(project_path)
     end
 

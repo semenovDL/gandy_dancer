@@ -56,8 +56,9 @@ module GandyDancer
       end
     end
 
-    # def generate(data)
-    #   [*data].each { |c| @context.generate(*c) }
-    # end
+    # Contract String => C::Any
+    def generate(data)
+      [*data].each { |c| @context.generate(*c) }
+    end
   end
 end

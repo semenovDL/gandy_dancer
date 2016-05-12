@@ -13,9 +13,10 @@ module GandyDancer
 
     Contract C::Bool => Project
     def prepare(delete_flag = false)
-      return unless File.directory?(path)
-      stop
-      delete if delete_flag
+      if File.directory?(path)
+        stop
+        delete if delete_flag
+      end
       self
     end
 
